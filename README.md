@@ -1,75 +1,156 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# NestJS Starter
 
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Commands
 
-## Description
+```
+# For start dev
+yarn dev
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# For build prod
+yarn prod
 
-## Installation
+# For format
+yarn format
 
-```bash
-$ npm install
+# For lint
+yarn lint
 ```
 
-## Running the app
+## Configs
 
-```bash
-# development
-$ npm run start
+### [please-use-yarn](https://www.freecodecamp.org/news/how-to-force-use-yarn-or-yarn/)
 
-# watch mode
-$ npm run start:dev
+- add `.yarnrc` in the root folder
+  ```
+  engine-strict = true
+  ```
+- modify `package.json`
+  ```
+  "engines": {
+    "yarn": "please-use-yarn",
+    "yarn": ">= 1.22.4"
+  },
+  ```
 
-# production mode
-$ npm run start:prod
-```
+### [GitFlow](https://danielkummer.github.io/git-flow-cheatsheet/index.ru_RU.html)
 
-## Test
+- install: `git flow init`
 
-```bash
-# unit tests
-$ npm run test
+### [Commitizen](https://github.com/commitizen/cz-cli)
 
-# e2e tests
-$ npm run test:e2e
+- install: `yarn install --dev commitizen`
+- making your repo commitizen-friendly `commitizen init cz-conventional-changelog --save-dev --save-exact`
+- add the `config.commitizen` key to the root of your package.json as shown here:
+  ```
+  "config": {
+      "commitizen": {
+        "path": "cz-conventional-changelog"
+      }
+  }
+  ```
+  and yarn command to package.json scripts
+  ```
+  "commit": "npx git-cz",
+  ```
 
-# test coverage
-$ npm run test:cov
-```
+### [Commitlint](https://github.com/conventional-changelog/commitlint)
 
-## Support
+- install: `yarn add --dev @commitlint/config-conventional @commitlint/cli`,
+- add the `commitlint.config.js` in the root folder with:
+  ```
+  module.exports = {
+    extends: ['@commitlint/config-conventional']
+  };
+  ```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### [Changelog](https://www.yarnjs.com/package/conventional-changelog-cli)
 
-## Stay in touch
+- install: `yarn add --dev conventional-changelog-cli`
+- init changelog: `conventional-changelog -p angular -i CHANGELOG.md -s -r 0`,
+- add yarn command
+  ```
+  "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
+  ```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### [Pretty-Quick](https://www.yarnjs.com/package/pretty-quick)
 
-## License
+- install: `yarn add --dev pretty-quick`
 
-  Nest is [MIT licensed](LICENSE).
+### [Husky](https://github.com/typicode/husky)
+
+- install: `yarn add --dev husky`
+- setup hooks in package.json:
+
+  ```
+  {
+      "husky": {
+          "hooks": {
+              "pre-commit": "pretty-quick --staged && yarn lint",
+              "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+              "pre-push": "yarn build"
+          }
+      },
+  }
+  ```
+
+- Environment
+  Add this in `.gitignore`
+  ```
+  # env
+  /src/environments/environment.ts
+  /src/environments/environment.prod.ts
+  ```
+  And use `environment.example.ts`, `environment.prod.example.ts` to push git
+
+## Structure
+
+    .
+    ├── dist/                                               # Build Folder
+    ├── documentation/                                      # Compodoc Documentation Folder
+    ├── logs/                                               # Logs: error/combined
+    ├── media/                                              # Media Folder
+    ├── src/                                                # Source
+    │   ├── app/                                            # Application
+    │   │   ├── featureName/                                # Feature, etc: Core, Shared, Media, Auth
+    │   │   │   ├── configs/                                # Feature configs
+    │   │   │   │   └── app-fileName.config.ts
+    │   │   │   ├── controller/                             # Feature controllers
+    │   │   │   │   └── app-fileName.controller.ts
+    │   │   │   ├── database/                               # Feature database
+    │   │   │   │   └── app-fileName.enity.ts
+    │   │   │   ├── decorators/                             # Feature decorators
+    │   │   │   │   └── app-fileName.decoratore.ts
+    │   │   │   │── dtos/                                   # Feature dtos
+    │   │   │   │   └── app-fileName.dto.ts
+    │   │   │   │── endpoints/                              # Feature endpoints
+    │   │   │   │   └── app-fileName.endpoint.ts
+    │   │   │   │── guards/                                 # Feature guards
+    │   │   │   │   └── app-fileName.guard.ts
+    │   │   │   │── services/                               # Feature services
+    │   │   │   │   └── app-fileName.service.ts
+    │   │   │   │── strategies/                             # Feature auth-strategies
+    │   │   │   │   └── app-fileName.strategy.ts
+    │   │   │   │── swagger/                                # Feature swagger
+    │   │   │   │   └── app-fileName.swagger.ts
+    │   │   │   │── interceptors/                           # Feature interceptors
+    │   │   │   │   └── app-fileName.interceptor.ts
+    │   │   │   │── routes/                                 # Feature routes
+    │   │   │   │   └── app-fileName.router.ts
+    │   │   │   └── app-featureName.module.ts
+    │   │   ├── bootstrap/                                  # Bootstrap
+    │   │   │   │── plugins/                                # NodeJs plugins
+    │   │   │   └── index.ts                                # Main File
+    │   │   └── app.module.ts
+    │   ├── assets/
+    │   └── environemnts/
+    │       ├── environment.example.env         # to push
+    │       ├── environment.env                 # .gitignore
+    │       ├── environment.prod.example.env    # to push
+    │       └── environment.prod.env            # .gitignore
+    └── ...
+
+## Libraries
+
+- ### UI frameworks
+
+  - [nest-router](https://www.yarnjs.com/package/nest-router) `yarn add nest-router`
