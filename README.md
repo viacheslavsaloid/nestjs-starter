@@ -93,6 +93,15 @@ yarn lint
   }
   ```
 
+### JSON
+
+- modify `package.json`
+
+```
+   "resolveJsonModule": true,
+   "esModuleInterop": true
+```
+
 - Environment
   Add this in `.gitignore`
   ```
