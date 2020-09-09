@@ -19,9 +19,12 @@ export class AppAuthService {
     this.usersRepository.findOne({ where: { [field]: value } });
 
   public signIn(user: AppUserEntity): AppJwtDto {
-    const { password, ...payload } = user;
+    const payload = { ...user };
+
+    delete payload.password;
 
     const token = this._jwtService.sign(payload);
+
     return { token };
   }
 
@@ -40,7 +43,10 @@ export class AppAuthService {
   }
 
   public generateToken(user: AppUserEntity) {
-    const { password, ...payload } = user;
+    const payload = { ...user };
+
+    delete payload.password;
+
     const token = this._jwtService.sign(payload);
 
     return { token };

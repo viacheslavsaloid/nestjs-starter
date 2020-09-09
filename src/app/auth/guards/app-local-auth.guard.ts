@@ -1,4 +1,4 @@
-import { ExecutionContext, Inject, Injectable, Logger, LoggerService, UnauthorizedException } from '@nestjs/common';
+import { ExecutionContext, Inject, Injectable, Logger, LoggerService } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AppLoggerDecorator } from 'src/app/shared/decorators';
 

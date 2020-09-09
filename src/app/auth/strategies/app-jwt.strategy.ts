@@ -14,7 +14,10 @@ export class AppJwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any): Promise<Partial<any>> {
-    const { password, ...user } = payload;
+    const user = { ...payload };
+
+    delete user.password;
+
     return user;
   }
 }

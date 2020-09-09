@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { AppLoggerDecorator } from 'src/app/shared/decorators';
 
 @Injectable()
 export class AppTransformInterceptor implements NestInterceptor {
