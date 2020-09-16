@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-export function appBootstrapSuccess(app: INestApplication) {
+export function appBootstrapSuccess(app: INestApplication): void {
   const configService = app.get(ConfigService);
 
   const mode = configService.get('MODE');

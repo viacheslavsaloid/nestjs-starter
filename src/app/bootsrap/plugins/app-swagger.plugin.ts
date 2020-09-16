@@ -7,6 +7,7 @@ import { APP_AUTH_SWAGGER_DOCS_ARR } from 'src/app/auth/swagger/doc';
 import { APP_SHOP_SWAGGER_DOCS_ARR } from 'src/app/shop/swagger/doc';
 
 import * as packageJson from '../../../../package.json';
+import { AppAuthEnum } from 'src/app/shared/interfaces/utils';
 
 const APP_SWAGGER_DOCS: AppSwaggerDocsArrInterface = [
   ...APP_MEDIA_SWAGGER_DOCS_ARR,
@@ -23,7 +24,7 @@ export function appSwagger(app: INestApplication): void {
       .setDescription(description)
       .setVersion(packageJson.version);
 
-    if (auth === 'bearer') {
+    if (auth === AppAuthEnum.BEARER) {
       config.addBearerAuth();
     }
 

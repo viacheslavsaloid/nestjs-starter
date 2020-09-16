@@ -8,24 +8,38 @@ import {
   getAppWinstonErrorsFileLogger,
   getAppWinstonRollbarLogger,
 } from 'src/app/bootsrap/plugins/winston/loggers';
-import { AppEnvEnum } from 'src/app/shared/interfaces/utils/app-env.enum';
 
 import 'winston-daily-rotate-file';
+import TransportStream from 'winston-transport';
 
 export function appWinston(configService: ConfigService): LoggerService {
-  const logsFolder = configService.get('LOGS_FOLDER');
-  const mode = configService.get('MODE');
+  const logsFolder = configService.get<string>('LOGS_FOLDER');
 
-  const transports = [];
+  const logInConsole = configService.get<string>('LOG_IN_CONSOLE');
+  const logErrorsInFile = configService.get<string>('LOG_ERRORS_IN_FILE');
+  const logCombinedInFile = configService.get<string>('LOG_COMBINED_IN_FILE');
+  const logErrorsInRollbar = configService.get<string>('LOG_ERRORS_IN_ROLLBAR');
 
-  if (mode === AppEnvEnum.PROD) {
-    const fileCombinedLogger = getAppWinstonCombinedFileLogger(logsFolder);
-    const fileErrorsLogger = getAppWinstonErrorsFileLogger(logsFolder);
-    const rollbarLogger = getAppWinstonRollbarLogger(configService);
-    transports.push(fileCombinedLogger, fileErrorsLogger, rollbarLogger);
-  } else {
+  const transports: TransportStream[] = [];
+
+  if (logInConsole !== 'false') {
     const consoleLogger = getAppWinstonConsoleLogger();
     transports.push(consoleLogger);
+  }
+
+  if (logErrorsInFile !== 'false') {
+    const fileErrorsLogger = getAppWinstonErrorsFileLogger(logsFolder);
+    transports.push(fileErrorsLogger);
+  }
+
+  if (logCombinedInFile !== 'false') {
+    const fileCombinedLogger = getAppWinstonCombinedFileLogger(logsFolder);
+    transports.push(fileCombinedLogger);
+  }
+
+  if (logErrorsInRollbar !== 'false') {
+    const rollbarLogger = getAppWinstonRollbarLogger(configService);
+    transports.push(rollbarLogger);
   }
 
   return WinstonModule.createLogger({
