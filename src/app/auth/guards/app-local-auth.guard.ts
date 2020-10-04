@@ -1,10 +1,11 @@
-import { ExecutionContext, Inject, Injectable, Logger, LoggerService } from '@nestjs/common';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AppLoggerDecorator } from 'src/app/shared/decorators';
+import { AppLoggerService } from 'src/app/shared/services';
 
 @Injectable()
 export class AppLocalAuthGuard extends AuthGuard('local') {
-  constructor(@Inject(Logger) private readonly _logger: LoggerService) {
+  constructor(private readonly _appLoggerService: AppLoggerService) {
     super();
   }
 

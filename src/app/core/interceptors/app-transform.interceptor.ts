@@ -1,35 +1,26 @@
-import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
-  Inject,
-  Logger,
-  LoggerService,
-} from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { AppLoggerService } from 'src/app/shared/services/app-logger.service';
 
 @Injectable()
 export class AppTransformInterceptor implements NestInterceptor {
-  private context = 'AppTransformInterceptor';
-
-  constructor(@Inject(Logger) private _logger: LoggerService) {}
+  constructor(private readonly _appLoggerService: AppLoggerService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const { url } = context.switchToHttp().getRequest();
-    const { statusCode } = context.switchToHttp().getResponse();
-    this._logger.log(`Request for: ${url}`, `${this.context}:intercept`);
+    const { url, statusCode } = context.switchToHttp().getRequest();
 
-    const now = Date.now();
+    this._appLoggerService.logInterceptorIn(url, this.constructor.name);
+
     return next.handle().pipe(
       map(data => ({ data })),
-      tap(res => {
-        const diffTime = Date.now() - now;
-        this._logger.log(
-          `Response: ${JSON.stringify(res)} for ${url} with statusCode: ${statusCode} after ${diffTime} ms`,
-          `${this.context}:intercept`,
-        );
+      tap(response => {
+        const logMessage = JSON.stringify({
+          url,
+          response,
+          code: statusCode,
+        });
+        this._appLoggerService.logInterceptorOut(logMessage, this.constructor.name);
       }),
     );
   }

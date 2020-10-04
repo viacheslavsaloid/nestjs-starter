@@ -1,5 +1,5 @@
 // Has to be called first.
-import { LoggerService } from '@nestjs/common';
+import { AppLoggerService } from 'src/app/shared/services/app-logger.service';
 
 export function AppLoggerDecorator(): MethodDecorator {
   return (classTarget, propertyKey: string, descriptor: PropertyDescriptor) => {
@@ -7,25 +7,18 @@ export function AppLoggerDecorator(): MethodDecorator {
 
     descriptor.value = new Proxy(descriptor.value, {
       async apply(funcTarget, thisArg, args) {
-        try {
-          const loggerService: LoggerService = thisArg._logger;
+        const appLoggerService: AppLoggerService = thisArg._appLoggerService;
 
-          let funcArgs = '';
+        const name = AppLoggerService.getName(['AppLoggerDecorator', className, propertyKey]);
 
-          try {
-            funcArgs = JSON.stringify(args);
-          } catch (err) {}
+        const functionArgs = AppLoggerService.getArgs(args);
+        appLoggerService.logFunctionIn(functionArgs, name);
 
-          loggerService.log(`Call with args: ${funcArgs}`, `${className}:${propertyKey}`);
+        const data = await funcTarget.apply(thisArg, args);
 
-          const result = await funcTarget.apply(thisArg, args);
+        appLoggerService.logFunctionOut(JSON.stringify(data), name);
 
-          loggerService.log(`Return: ${JSON.stringify(result)}`, `${className}:${propertyKey}`);
-
-          return result;
-        } catch (err) {
-          console.error(`[${this.constructor.name}]: Maybe you forgot to inject logger \n`, err);
-        }
+        return data;
       },
     });
   };

@@ -1,7 +1,7 @@
 import { ApiBearerAuth, ApiCreatedResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
-import { AppErrorDto } from 'src/app/shared/dtos';
 import { AppSwaggerDecoratorsMapInterface, AppSwaggerEndpointInterface } from 'src/app/shared/interfaces/swagger';
+import { AppHttpErrorDto } from 'src/app/shared/dtos';
 
 const APP_SWAGGER_DECORATORS_MAP: AppSwaggerDecoratorsMapInterface = {
   tag: ApiTags,
@@ -9,7 +9,7 @@ const APP_SWAGGER_DECORATORS_MAP: AppSwaggerDecoratorsMapInterface = {
   ok: ApiOkResponse,
   auth: () => ApiBearerAuth(),
   unauthorized: args => {
-    const { type = AppErrorDto, ...rest } = args;
+    const { type = AppHttpErrorDto, ...rest } = args;
     return ApiUnauthorizedResponse({ type, ...rest });
   },
 };

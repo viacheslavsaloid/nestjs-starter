@@ -6,4 +6,4 @@ export * from './app-roles.guard';
 export * from './app-jwt-auth.guard';
 export * from './app-local-auth.guard';
 
-export const AUTH_GUARDS = [AppLocalAuthGuard, AppJwtAuthGuard, AppRolesGuard];
+export const APP_AUTH_GUARDS = [AppLocalAuthGuard, AppJwtAuthGuard, AppRolesGuard];

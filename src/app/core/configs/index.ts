@@ -1,3 +1,3 @@
-export * from './app.configs';
-export * from './app-status-monitor.configs';
-export * from './app-typeorm.configs';
+export * from 'src/app/core/configs/app.config';
+export * from 'src/app/core/configs/app-status-monitor.config';
+export * from 'src/app/core/configs/app-typeorm.config';
