@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import rateLimit from 'express-rate-limit';
 
-export function appRateLimitPlugin(app: INestApplication) {
+export function appRateLimitPlugin(app: INestApplication): void {
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes

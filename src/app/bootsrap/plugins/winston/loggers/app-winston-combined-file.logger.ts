@@ -7,7 +7,7 @@ import {
 import { APP_REPLACE_KEY } from 'src/app/shared/utils';
 import winston from 'winston';
 
-export function getAppWinstonCombinedFileLogger(dirname = 'logs') {
+export function getAppWinstonCombinedFileLogger(dirname = 'logs'): winston.transport {
   return new winston.transports.DailyRotateFile({
     dirname,
     filename: APP_WINSTON_FILE_LOGGER_FILE_NAME.replace(APP_REPLACE_KEY, 'combined'),

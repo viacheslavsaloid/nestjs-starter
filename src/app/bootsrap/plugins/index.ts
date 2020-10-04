@@ -7,14 +7,15 @@ import { appRateLimitPlugin } from './app-rate-limit.plugin';
 import { ConfigService } from '@nestjs/config';
 import { appSwagger } from './app-swagger.plugin';
 import { appWinston } from './winston';
+import { AppEnvEnum } from 'src/app/shared/interfaces/utils';
 
 export function appPlugins(app: INestApplication) {
   const configService = app.get(ConfigService);
-  const mode = configService.get('MODE');
+  const mode = configService.get<AppEnvEnum>('MODE');
 
   app.useLogger(appWinston(configService));
 
-  if (mode === 'production') {
+  if (mode === AppEnvEnum.PROD) {
     appCorsPlugin(app);
     appHelmetPlugin(app);
     appCsurfPlugin(app);

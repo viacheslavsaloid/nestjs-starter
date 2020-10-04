@@ -1,21 +1,22 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Exclude } from 'class-transformer';
-import { ApiProperty } from '@nestjsx/crud/lib/crud';
 import { AppUserRoleEnum } from './app-user-role.enum';
+import { AppSwaggerEntityDecorator } from 'src/app/shared/decorators/app-swagger-entity.decorator';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Entity()
 export class AppUserEntity {
   @PrimaryGeneratedColumn()
+  @ApiHideProperty()
   id: number;
 
+  @AppSwaggerEntityDecorator({ example: 'Den Brown' })
   @Column()
   username: string;
 
-  @ApiProperty({ type: [], enum: AppUserRoleEnum })
   @Column('simple-array')
   roles: AppUserRoleEnum[];
 
-  @Exclude()
+  @AppSwaggerEntityDecorator({ example: 'denbrown' })
   @Column()
   password: string;
 }

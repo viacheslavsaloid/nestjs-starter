@@ -9,7 +9,7 @@ declare const module: any;
 export async function appBootstrap(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
-  const port = configService.get('PORT');
+  const port = configService.get<number>('PORT');
 
   appPlugins(app);
 

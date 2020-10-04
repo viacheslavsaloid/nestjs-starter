@@ -2,21 +2,31 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
-import { AppUserEntity } from '../../database';
-import { AppJwtDto } from '../../dtos';
+import { ValidateArgsInterface } from 'src/app/auth/interfaces';
+import { AppUserEntity } from 'src/app/auth/database';
+import { AppJwtDto } from 'src/app/auth/dtos';
+import { APP_MESSAGES } from 'src/assets/messages';
 
 @Injectable()
 export class AppAuthService {
   constructor(
     @InjectRepository(AppUserEntity)
-    private usersRepository: Repository<AppUserEntity>,
-    private _jwtService: JwtService,
+    private readonly appUsersRepository: Repository<AppUserEntity>,
+    private readonly _jwtService: JwtService,
   ) {}
 
-  public getUser = (username: string): Promise<AppUserEntity> => this.validate('username', username);
+  public getUser(username: string): Promise<AppUserEntity> {
+    return this.validate({
+      field: 'username',
+      value: username,
+    });
+  }
 
-  public validate = (field: 'username' | 'password', value: string): Promise<AppUserEntity> =>
-    this.usersRepository.findOne({ where: { [field]: value } });
+  public validate(args: ValidateArgsInterface): Promise<AppUserEntity> {
+    const { field, value } = args;
+
+    return this.appUsersRepository.findOne({ where: { [field]: value } });
+  }
 
   public signIn(user: AppUserEntity): AppJwtDto {
     const payload = { ...user };
@@ -30,14 +40,16 @@ export class AppAuthService {
 
   public async signUp(user: AppUserEntity): Promise<AppJwtDto> {
     const { username } = user;
-
-    const isUsernameExist = await this.validate('username', username);
+    const isUsernameExist = await this.validate({
+      field: 'username',
+      value: username,
+    });
 
     if (isUsernameExist) {
-      throw new UnauthorizedException(null, 'Email Already Exist');
+      throw new UnauthorizedException(null, APP_MESSAGES.AUTH.ERRORS.EMAIL_EXIST);
     }
 
-    this.usersRepository.insert(user);
+    await this.appUsersRepository.insert(user);
 
     return this.generateToken(user);
   }
