@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { ValidateArgsInterface } from 'src/app/auth/interfaces';
 import { AppUserEntity } from 'src/app/auth/database';
 import { AppJwtDto } from 'src/app/auth/dtos';
+import { APP_MESSAGES } from 'src/assets/messages';
 
 @Injectable()
 export class AppAuthService {
@@ -45,7 +46,7 @@ export class AppAuthService {
     });
 
     if (isUsernameExist) {
-      throw new UnauthorizedException(null, 'Email Already Exist');
+      throw new UnauthorizedException(null, APP_MESSAGES.AUTH.ERRORS.EMAIL_EXIST);
     }
 
     await this.appUsersRepository.insert(user);

@@ -5,7 +5,7 @@ export const APP_JWT_CONFIGS = {
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: (configService: ConfigService): JwtModuleOptions => ({
-    secret: configService.get('JWT_SECRET'),
-    signOptions: { expiresIn: '365d' },
+    secret: configService.get<string>('JWT_SECRET'),
+    signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN') },
   }),
 };
