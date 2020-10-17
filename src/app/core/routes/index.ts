@@ -5,6 +5,7 @@ import { AppShopModule } from 'src/app/shop/app-shop.module';
 
 const API_PATH = '/api';
 const VERSION_PATH = '/v1';
+
 const AUTH_PATH = '/auth';
 const SHOP_PATH = '/shop';
 

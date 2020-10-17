@@ -1,1 +1,1 @@
-export * from 'src/app/auth/dtos/app-jwt.dto';
+export { AppJwtDto } from 'src/app/auth/dtos/app-jwt.dto';

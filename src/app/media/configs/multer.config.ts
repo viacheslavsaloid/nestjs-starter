@@ -1,15 +1,19 @@
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { fileFilter, fileNameFormatter } from 'src/app/media/utils/multer';
+import { appMulterFileFilter, appMulterFileName } from 'src/app/media/helpers/multer';
 import { diskStorage } from 'multer';
+import { AppSharedModule } from 'src/app/shared/app-shared.module';
+import { AppConfigService } from 'src/app/shared/services';
 
-export const APP_MEDIA_MULTER_CONFIGS = {
-  imports: [ConfigModule],
-  useFactory: async (configService: ConfigService) => ({
+/**
+ * @description Configs for multer
+ */
+export const APP_MEDIA_MULTER_CONFIG = {
+  imports: [AppSharedModule],
+  inject: [AppConfigService],
+  useFactory: (appConfigService: AppConfigService) => ({
     storage: diskStorage({
-      destination: configService.get<string>('MEDIA_FOLDER'),
-      filename: fileNameFormatter,
+      destination: appConfigService.get('MEDIA_FOLDER'),
+      filename: appMulterFileName,
     }),
-    fileFilter,
+    fileFilter: appMulterFileFilter,
   }),
-  inject: [ConfigService],
 };

@@ -1,12 +1,12 @@
+import { AppKeyValueInterface } from 'src/app/shared/interfaces/helpers/app-key-value.interface';
+
 export interface AppSwaggerResponseInterface {
   type?: any;
   description?: string;
   isArray?: boolean;
 }
 
-export interface AppSwaggerEndpointsMapInterface {
-  [key: string]: AppSwaggerEndpointInterface;
-}
+export type AppSwaggerEndpointsMapInterface = AppKeyValueInterface<AppSwaggerEndpointInterface>;
 
 export interface AppSwaggerEndpointInterface {
   tag?: string;

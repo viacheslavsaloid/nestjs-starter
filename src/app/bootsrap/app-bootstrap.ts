@@ -1,15 +1,18 @@
 import { INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { ConfigService } from '@nestjs/config';
 import { AppModule } from 'src/app/app.module';
 import { appPlugins } from 'src/app/bootsrap/plugins';
+import { AppConfigService } from 'src/app/shared/services';
 
 declare const module: any;
 
+/**
+ * @description Method, which create and run app in dev, prod or hmr (hot) mode
+ */
 export async function appBootstrap(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule);
-  const configService = app.get(ConfigService);
-  const port = configService.get('PORT');
+  const appConfigService = app.get(AppConfigService);
+  const port = appConfigService.get('PORT');
 
   appPlugins(app);
 

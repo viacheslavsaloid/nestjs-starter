@@ -1,5 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 
-export function appCorsPlugin(app: INestApplication) {
+/**
+ * @description Method, which setup cors for application
+ */
+export function appCorsPlugin(app: INestApplication): void {
   app.enableCors();
 }

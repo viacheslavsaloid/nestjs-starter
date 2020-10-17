@@ -1,23 +1,32 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { AppHelperService } from 'src/app/shared/services';
+import { AppUserEntity } from 'src/app/auth/database';
+import { AppConfigService } from 'src/app/shared/services/config/app-config.service';
 
+/**
+ * @description class for jwt strategy setup. Init with secret key and ignore expiration field
+ */
 @Injectable()
 export class AppJwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private _configService: ConfigService) {
+  constructor(
+    private readonly _appConfigService: AppConfigService,
+    private readonly _appHelperService: AppHelperService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
-      secretOrKey: _configService.get('JWT_SECRET'),
+      ignoreExpiration: _appConfigService.isDev,
+      secretOrKey: _appConfigService.get('JWT_SECRET'),
     });
   }
 
-  async validate(payload: any): Promise<Partial<any>> {
-    const user = { ...payload };
-
-    delete user.password;
-
-    return user;
+  /**
+   * @description Method to validate user
+   * @param payload - user
+   * @returns user without password
+   */
+  validate(payload: AppUserEntity): AppUserEntity {
+    return this._appHelperService.parseObject({ object: payload, exclude: ['password'] });
   }
 }

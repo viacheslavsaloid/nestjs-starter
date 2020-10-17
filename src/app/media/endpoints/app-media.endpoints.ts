@@ -1,5 +1,5 @@
 import { AppLocalAuthGuard } from 'src/app/auth/guards';
-import { AppEndpointsMapInterface } from 'src/app/shared/interfaces/utils';
+import { AppEndpointsMapInterface } from 'src/app/shared/interfaces/helpers';
 
 export const AppMediaEndpoints: AppEndpointsMapInterface = {
   UPLOAD_FILE: { method: { type: 'post', url: '' }, guards: AppLocalAuthGuard },

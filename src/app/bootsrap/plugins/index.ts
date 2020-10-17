@@ -4,18 +4,16 @@ import { appCorsPlugin } from './app-cors.plugin';
 import { appHelmetPlugin } from './app-helmet.plugin';
 import { appCsurfPlugin } from './app-csurf.plugin';
 import { appRateLimitPlugin } from './app-rate-limit.plugin';
-import { ConfigService } from '@nestjs/config';
 import { appSwagger } from './app-swagger.plugin';
 import { appWinston } from './winston';
-import { AppEnvEnum } from 'src/app/shared/interfaces/utils/app-env.enum';
+import { AppConfigService } from 'src/app/shared/services';
 
 export function appPlugins(app: INestApplication) {
-  const configService = app.get(ConfigService);
-  const mode = configService.get('MODE');
+  const appConfigService = app.get(AppConfigService);
 
-  app.useLogger(appWinston(configService));
+  app.useLogger(appWinston(appConfigService));
 
-  if (mode === AppEnvEnum.PROD) {
+  if (appConfigService.isProd) {
     appCorsPlugin(app);
     appHelmetPlugin(app);
     appCsurfPlugin(app);

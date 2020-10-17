@@ -1,21 +1,24 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Exclude } from 'class-transformer';
-import { ApiProperty } from '@nestjsx/crud/lib/crud';
-import { AppUserRoleEnum } from './app-user-role.enum';
+import { AppUserRoleEnum } from 'src/app/auth/database/app-user-role.enum';
+import {
+  AppSwaggerColumnDecorator,
+  AppTypeormColumnDecorator,
+  AppTypeormEntityDecorator,
+} from 'src/app/shared/decorators/database';
+import { AppBaseColumn } from 'src/app/shared/helpers/database';
 
-@Entity()
-export class AppUserEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+/**
+ * @description Users Table
+ */
+@AppTypeormEntityDecorator()
+export class AppUserEntity extends AppBaseColumn {
+  @AppSwaggerColumnDecorator({ example: 'viacheslavsaloid.work@gmail.com' })
+  @AppTypeormColumnDecorator()
+  email: string;
 
-  @Column()
-  username: string;
-
-  @ApiProperty({ type: [], enum: AppUserRoleEnum })
-  @Column('simple-array')
-  roles: AppUserRoleEnum[];
-
-  @Exclude()
-  @Column()
+  @AppSwaggerColumnDecorator({ hide: true })
+  @AppTypeormColumnDecorator()
   password: string;
+
+  @AppTypeormColumnDecorator({ type: 'simple-array' })
+  roles: AppUserRoleEnum[];
 }

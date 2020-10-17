@@ -1,25 +1,25 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Strategy } from 'passport-local';
 import { AppAuthService } from '../services';
+import { AppUserEntity } from 'src/app/auth/database';
 
+/**
+ * @description class for jwt strategy setup. Init with secret key and ignore expiration field
+ */
 @Injectable()
 export class AppLocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private _authService: AppAuthService) {
+  constructor(private readonly _appAuthService: AppAuthService) {
     super();
   }
 
-  async validate(username: string, password: string): Promise<any> {
-    const isUsernameValid = await this._authService.validate('username', username);
-    if (!isUsernameValid) {
-      throw new UnauthorizedException(null, 'Wrong Email');
-    }
-
-    const isPasswordValid = await this._authService.validate('password', password);
-    if (!isPasswordValid) {
-      throw new UnauthorizedException(null, 'Wrong Password');
-    }
-
-    return await this._authService.getUser(username);
+  /**
+   * @description Method to validate user
+   * @param email
+   * @param password
+   * @returns user with email and password
+   */
+  validate(email: string, password: string): Promise<AppUserEntity> {
+    return this._appAuthService.getUser({ email, password });
   }
 }

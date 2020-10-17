@@ -1,16 +1,21 @@
 import { INestApplication } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { APP_MESSAGES } from 'src/assets/messages';
+import { APP_REPLACE_KEY, APP_REPLACE_KEY_1, APP_REPLACE_KEY_2 } from 'src/app/shared/helpers/variables';
+import { AppConfigService } from 'src/app/shared/services';
 
-export function appBootstrapSuccess(app: INestApplication) {
-  const configService = app.get(ConfigService);
+/**
+ * @description Method, which log, if app runs success
+ */
+export function appBootstrapSuccess(app: INestApplication): void {
+  const appConfigService = app.get(AppConfigService);
 
-  const mode = configService.get('MODE');
-  const host = configService.get('HOST');
-  const port = configService.get('PORT');
+  const mode = appConfigService.get('MODE');
+  const host = appConfigService.get('HOST');
+  const port = appConfigService.get('PORT');
 
   const url = `${host}:${port}/`;
 
-  console.log(`App in ${mode} mode opened on: ${url}`);
-  console.log(`Swagger opened on ${url}swagger/`);
-  console.log(`Monitoring Page opened on ${url}status/`);
+  console.log(APP_MESSAGES.BOOTSTRAP.APP_OPENED.replace(APP_REPLACE_KEY_1, mode).replace(APP_REPLACE_KEY_2, url));
+  console.log(APP_MESSAGES.BOOTSTRAP.SWAGGER_OPENED.replace(APP_REPLACE_KEY, url));
+  console.log(APP_MESSAGES.BOOTSTRAP.MONITORING_PAGE_OPENED.replace(APP_REPLACE_KEY, url));
 }

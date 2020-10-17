@@ -1,6 +1,9 @@
 import winston, { format } from 'winston';
 
-export function getAppWinstonErrorsFileLogger(dirname = 'logs') {
+/**
+ * @description function to write errors to file.
+ */
+export function getAppWinstonErrorsFileLogger(dirname = 'logs'): winston.transport {
   return new winston.transports.DailyRotateFile({
     dirname,
     level: 'error',

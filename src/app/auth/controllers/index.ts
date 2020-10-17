@@ -1,5 +1,7 @@
-import { AppAuthController } from 'src/app/auth/controllers/auth/auth.controller';
+import { AppControllersInterface } from 'src/app/shared/interfaces/helpers';
 
-export * from 'src/app/auth/controllers/auth/auth.controller';
+import { AppAuthController } from 'src/app/auth/controllers/auth/app-auth.controller';
 
-export const AUTH_CONTROLLERS = [AppAuthController];
+export { AppAuthController } from 'src/app/auth/controllers/auth/app-auth.controller';
+
+export const APP_AUTH_CONTROLLERS: AppControllersInterface = [AppAuthController];

@@ -1,26 +1,29 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_JWT_CONFIGS, APP_PASSPORT_CONFIGS } from './configs';
-import { AUTH_GUARDS } from './guards';
+import { APP_JWT_CONFIG, APP_PASSPORT_CONFIG } from './configs';
+import { APP_AUTH_GUARDS } from './guards';
 import { APP_AUTH_STRATEGIES } from './strategies';
-import { AUTH_CONTROLLERS } from './controllers';
+import { APP_AUTH_CONTROLLERS } from './controllers';
 import { APP_AUTH_ENTETIES } from './database';
 import { APP_AUTH_SERVICES } from './services';
+import { AppSharedModule } from 'src/app/shared/app-shared.module';
+import { AppExportsInterface, AppImportsInterface, AppProvidersInterface } from 'src/app/shared/interfaces/helpers';
 
-export const AUTH_IMPORTS = [
-  PassportModule.register(APP_PASSPORT_CONFIGS),
-  JwtModule.registerAsync(APP_JWT_CONFIGS),
+const APP_AUTH_IMPORTS: AppImportsInterface = [
+  AppSharedModule,
+  PassportModule.register(APP_PASSPORT_CONFIG),
+  JwtModule.registerAsync(APP_JWT_CONFIG),
   TypeOrmModule.forFeature(APP_AUTH_ENTETIES),
 ];
-export const AUTH_PROVIDERS = [...APP_AUTH_SERVICES, ...AUTH_GUARDS, ...APP_AUTH_STRATEGIES, Logger];
-export const AUTH_EXPORTS = [...AUTH_PROVIDERS];
+const APP_AUTH_PROVIDERS: AppProvidersInterface = [...APP_AUTH_SERVICES, ...APP_AUTH_GUARDS, ...APP_AUTH_STRATEGIES];
+const APP_AUTH_EXPORTS: AppExportsInterface = [...APP_AUTH_PROVIDERS];
 
 @Module({
-  imports: AUTH_IMPORTS,
-  controllers: AUTH_CONTROLLERS,
-  providers: AUTH_PROVIDERS,
-  exports: AUTH_EXPORTS,
+  imports: APP_AUTH_IMPORTS,
+  controllers: APP_AUTH_CONTROLLERS,
+  providers: APP_AUTH_PROVIDERS,
+  exports: APP_AUTH_EXPORTS,
 })
 export class AppAuthModule {}

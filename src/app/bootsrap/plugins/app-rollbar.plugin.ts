@@ -1,9 +1,12 @@
-import { ConfigService } from '@nestjs/config';
 import Rollbar from 'rollbar';
+import { AppConfigService } from 'src/app/shared/services';
 
-export function appRollbar(configService: ConfigService) {
-  const accessToken = configService.get('ROLLBAR_ACCESS_TOKEN');
-  const mode = configService.get('MODE');
+/**
+ * @description Method, which setup rollbar for application
+ */
+export function appRollbar(appConfigService: AppConfigService): Rollbar {
+  const accessToken = appConfigService.get('ROLLBAR_ACCESS_TOKEN');
+  const mode = appConfigService.get('MODE');
 
   return new Rollbar({
     accessToken,

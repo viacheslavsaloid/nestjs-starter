@@ -1,3 +1,3 @@
-import { AppEndpointsMapInterface } from 'src/app/shared/interfaces/utils';
+import { AppEndpointsMapInterface } from 'src/app/shared/interfaces/helpers';
 
 export const AppProductsEndpoints: AppEndpointsMapInterface = {};
