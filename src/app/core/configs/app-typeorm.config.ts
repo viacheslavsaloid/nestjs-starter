@@ -1,4 +1,3 @@
-import { ConfigService, ConfigModule } from '@nestjs/config';
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AppSharedModule } from 'src/app/shared/app-shared.module';
 import { AppConfigService } from 'src/app/shared/services';
